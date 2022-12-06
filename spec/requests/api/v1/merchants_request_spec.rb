@@ -52,5 +52,14 @@ describe "Merchants API" do
       expect(data[:attributes]).to have_key(:name)
       expect(data[:attributes][:name]).to eq(Merchant.find(id).name)
     end
+
+    it 'sends 404 if id is not valid' do 
+      bad_id = 8923987297
+      expect { get "/api/v1/merchants/#{bad_id}" }.to raise_error(ActiveRecord::RecordNotFound)
+    end
+  end
+
+  it "sends a list of merchant's items" do
+
   end
 end
