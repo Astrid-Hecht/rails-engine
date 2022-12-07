@@ -75,7 +75,7 @@ describe "Merchants API" do
 
     expect(parsed).to have_key(:data)
     expect(parsed[:data]).to be_an Array
-    expect(parsed[:data].count).to eq(Merchant.find(merch1).items.count)
+    expect(parsed[:data].count).to eq(Merchant.find(merc1.id).items.count)
 
     data = parsed[:data]
 
@@ -94,12 +94,12 @@ describe "Merchants API" do
       expect(item_deets).to have_key(:unit_price)
       expect(item_deets).to have_key(:merchant_id)
 
-      db_item = Merchant.find(merch1).items[index]
+      db_item = Merchant.find(merc1.id).items[index]
 
       expect(item_deets[:name]).to eq(db_item.name)
       expect(item_deets[:description]).to eq(db_item.description)
       expect(item_deets[:unit_price]).to eq(db_item.unit_price)
-      expect(item_deets[:merchant_id]).to eq(Merchant.find(merch1).id)
+      expect(item_deets[:merchant_id]).to eq(Merchant.find(merc1.id).id)
     end
   end
 end
