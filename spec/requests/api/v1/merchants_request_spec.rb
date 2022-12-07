@@ -2,7 +2,7 @@ require 'rails_helper'
 
 describe "Merchants API" do
   it "sends a list of merchants" do
-    create_list(:merchant, 3)
+    created_merchants = create_list(:merchant, 3)
 
     get '/api/v1/merchants'
 
@@ -21,7 +21,7 @@ describe "Merchants API" do
 
       expect(merchant[:attributes]).to have_key(:name)
       expect(merchant[:attributes][:name]).to be_a(String)
-      expect(merchant[:attributes][:name]).to eq(Merchant.find_by(id: index + 1).name)
+      expect(merchant[:attributes][:name]).to eq(created_merchants[index].name)
     end
   end
 
@@ -101,11 +101,11 @@ describe "Merchants API" do
         expect(item_deets[:unit_price]).to eq(db_item.unit_price)
         expect(item_deets[:merchant_id]).to eq(merc1.id)
       end
+    end
 
-      it 'sends 404 if id is not valid' do 
-        bad_id = 8923987297
-        expect { get "/api/v1/merchants/#{bad_id}/items" }.to raise_error(ActiveRecord::RecordNotFound)
-      end
+    it 'sends 404 if id is not valid' do 
+      bad_id = 8923987297
+      expect { get "/api/v1/merchants/#{bad_id}/items" }.to raise_error(ActiveRecord::RecordNotFound)
     end
   end
 end
