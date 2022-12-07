@@ -32,13 +32,11 @@ describe "Items API" do
       expect(item[:attributes][:description]).to eq(Item.find_by(id: index + 1).description)
 
       expect(item[:attributes]).to have_key(:unit_price)
-      expect(item[:attributes][:unit_price]).to be_a(String)
-      expect(item[:attributes][:unit_price]).to match(/[+-]?((\d+\.?\d*)|(\.\d+))/)
-      expect(item[:attributes][:unit_price]).to eq(Item.find_by(id: index + 1).unit_price.to_s)
+      expect(item[:attributes][:unit_price]).to be_a(Float)
+      expect(item[:attributes][:unit_price]).to eq(Item.find_by(id: index + 1).unit_price)
 
       expect(item[:attributes]).to have_key(:merchant_id)
-      expect(item[:attributes][:merchant_id]).to be_a(String)
-      expect(item[:attributes][:merchant_id]).not_to match(/\D/)
+      expect(item[:attributes][:merchant_id]).to be_a(Integer)
       expect(item[:attributes][:merchant_id]).to eq(Item.find_by(id: index + 1).merchant_id)
     end
   end
