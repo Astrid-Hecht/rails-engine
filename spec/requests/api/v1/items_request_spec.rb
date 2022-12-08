@@ -129,7 +129,7 @@ describe "Items API" do
       expect(Item.last).to eq(second)
       expect(Item.last).not_to eq(first)
 
-      expect { delete "/api/v1/#{second.id}" }.to change { Item.count }.by(1)
+      expect { delete "/api/v1/items/#{second.id}" }.to change { Item.count }.by(-1)
 
       expect(Item.last).not_to eq(second)
       expect(Item.last).to eq(first)
