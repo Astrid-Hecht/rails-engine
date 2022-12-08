@@ -62,9 +62,9 @@ describe "Merchants API" do
     it "sends a list of merchant's items if id is valid" do
       merc1 = create(:merchant)
 
-      item1 = create(:item, merchant: merc1)
-      item2 = create(:item, merchant: merc1)
-      item3 = create(:item, merchant: merc1)
+      _item1 = create(:item, merchant: merc1)
+      _item2 = create(:item, merchant: merc1)
+      _item3 = create(:item, merchant: merc1)
 
       get "/api/v1/merchants/#{merc1.id}/items"
 
