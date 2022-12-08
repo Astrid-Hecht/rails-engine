@@ -14,7 +14,7 @@ module Api
       end
 
       def destroy
-        render json: ItemSerializer.new(Item.create(item_params)), status: :no_content
+        render json: ItemSerializer.new(Item.destroy(params[:id])), status: :no_content
       end
 
       private
