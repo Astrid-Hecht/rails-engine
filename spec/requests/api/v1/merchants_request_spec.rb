@@ -1,7 +1,7 @@
 require 'rails_helper'
 
-describe "Merchants API" do
-  it "sends a list of merchants" do
+describe 'Merchants API' do
+  it 'sends a list of merchants' do
     created_merchants = create_list(:merchant, 3)
 
     get '/api/v1/merchants'
@@ -25,7 +25,7 @@ describe "Merchants API" do
     end
   end
 
-  context "a single merchant" do
+  context 'a single merchant' do
     it 'is sent if id is valid' do
       id = create(:merchant).id
 
@@ -52,13 +52,23 @@ describe "Merchants API" do
       expect(data[:attributes][:name]).to eq(Merchant.find(id).name)
     end
 
-    it 'sends 404 if id is not valid' do 
-      bad_id = 8923987297
-      expect { get "/api/v1/merchants/#{bad_id}" }.to raise_error(ActiveRecord::RecordNotFound)
+    it 'sends 404 if id is not valid' do
+      bad_id = 8_923_987_297
+      get "/api/v1/merchants/#{bad_id}"
+      expect(response.status).to eq(404)
+
+      parsed = JSON.parse(response.body, symbolize_names: true)
+
+      expect(parsed).to have_key(:errors)
+      expect(parsed[:errors]).to be_a Array
+
+      expect(parsed[:errors][0]).to have_key(:status)
+      expect(parsed[:errors][0]).to have_key(:message)
+      expect(parsed[:errors][0]).to have_key(:code)
     end
   end
 
-  context "merchant items" do
+  context 'merchant items' do
     it "sends a list of merchant's items if id is valid" do
       merc1 = create(:merchant)
 
@@ -103,9 +113,20 @@ describe "Merchants API" do
       end
     end
 
-    it 'sends 404 if id is not valid' do 
+    it 'sends 404 if id is not valid' do
       bad_id = 8923987297
-      expect { get "/api/v1/merchants/#{bad_id}/items" }.to raise_error(ActiveRecord::RecordNotFound)
+      get "/api/v1/merchants/#{bad_id}/items"
+
+      expect(response.status).to eq(404)
+
+      parsed = JSON.parse(response.body, symbolize_names: true)
+
+      expect(parsed).to have_key(:errors)
+      expect(parsed[:errors]).to be_a Array
+
+      expect(parsed[:errors][0]).to have_key(:status)
+      expect(parsed[:errors][0]).to have_key(:message)
+      expect(parsed[:errors][0]).to have_key(:code)
     end
   end
 end
