@@ -7,37 +7,28 @@ module Api
       end
 
       def show
-        # binding.pry
-        if item_id_valid?
-          render json: ItemSerializer.new(Item.find(params[:id]))
-        else
-          render json: ErrorSerializer.new(Error.new('Invalid item id', 'NOT FOUND', 404)).serialized_json, status: :not_found
-        end
+        render json: ItemSerializer.new(Item.find(params[:id])) if item_id_valid?
       end
 
       def create
-        render json: ItemSerializer.new(Item.create(item_params)), status: :created
+        item = Item.new(item_params)
+        if item.save
+          render json: ItemSerializer.new(item), status: :created
+        else
+          render_bad_request
+        end
       end
 
       def update
-        if item_id_valid?
-          if update_valid?
-            Item.find(params[:id]).update(item_params)
-            render json: ItemSerializer.new(Item.find(params[:id]))
-          else
-            render json: ErrorSerializer.new(Error.new('Missing or invalid item paramters', 'BAD REQUEST', 400)).serialized_json, status: :bad_request
-          end
-        else
-          render json: ErrorSerializer.new(Error.new('Invalid item id', 'NOT FOUND', 404)).serialized_json, status: :not_found
-        end
+        return unless item_id_valid?
+        return unless update_valid?
+
+        Item.find(params[:id]).update(item_params)
+        render json: ItemSerializer.new(Item.find(params[:id])), status: 200
       end
 
       def destroy
-        if item_id_valid?
-          render json: ItemSerializer.new(Item.destroy(params[:id])), status: :no_content
-        else
-          render json: ErrorSerializer.new(Error.new('Invalid item id', 'NOT FOUND', 404)).serialized_json, status: :not_found
-        end
+        render json: ItemSerializer.new(Item.destroy(params[:id])), status: :no_content if item_id_valid?
       end
 
       private
@@ -47,15 +38,11 @@ module Api
       end
 
       def update_valid?
-        if params[:item].present? && params[:item].keys.count > 0 
-          if params[:item][:merchant_id].present?
-            merch_id_list.include?(params[:item][:merchant_id].to_i)
-          else
-            true
-          end
-        else
-          false
-        end
+        return render_bad_request unless params[:item].present? && params[:item].keys.count.positive?
+        return true if params[:item][:merchant_id].nil?
+        return render_merchant_not_found unless merch_id_list.include?(params[:item][:merchant_id].to_i)
+
+        true
       end
     end
   end

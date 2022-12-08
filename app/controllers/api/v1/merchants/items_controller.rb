@@ -4,11 +4,7 @@ module Api
       class ItemsController < ApplicationController
 
         def index
-          if merch_id_valid?
-            render json: ItemSerializer.new(Merchant.find(params[:merchant_id]).items)
-          else
-            render json: ErrorSerializer.new(Error.new('Invalid merchant id', 'NOT FOUND', 404)).serialized_json, status: :not_found
-          end
+          render json: ItemSerializer.new(Merchant.find(params[:merchant_id]).items) if merch_id_valid?
         end
       end
     end
