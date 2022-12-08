@@ -10,7 +10,11 @@ module Api
       end
 
       def create
-        render json: Item.create(item_params), status: :created
+        render json: ItemSerializer.new(Item.create(item_params)), status: :created
+      end
+
+      def destroy
+        render json: ItemSerializer.new(Item.create(item_params)), status: :no_content
       end
 
       private

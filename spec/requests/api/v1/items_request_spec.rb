@@ -105,7 +105,6 @@ describe "Items API" do
       headers = {"CONTENT_TYPE" => "application/json"}
 
       post "/api/v1/items", headers: headers, params: JSON.generate(item: item_params)
-      
       item = Item.last
       expect(response).to be_successful
       expect(response.status).to eq(201)
@@ -121,6 +120,19 @@ describe "Items API" do
 
       expect(item[:merchant_id]).to be_a(Integer)
       expect(item[:merchant_id]).to eq(item_params[:merchant_id])
+    end
+
+    it 'can destroy item if passed id' do
+      first = create(:item, name: "first")
+      second = create(:item, name: "second")
+
+      expect(Item.last).to eq(second)
+      expect(Item.last).not_to eq(first)
+
+      expect { delete "/api/v1/#{second.id}" }.to change { Item.count }.by(1)
+
+      expect(Item.last).not_to eq(second)
+      expect(Item.last).to eq(first)
     end
   end
 end
