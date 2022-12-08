@@ -86,7 +86,7 @@ describe 'Items API' do
     end
 
     it 'sends 404 if id is not valid' do
-      get "/api/v1/items/8923987297"
+      get '/api/v1/items/8923987297'
       expect(response.status).to eq(404)
 
       parsed = JSON.parse(response.body, symbolize_names: true)
@@ -129,6 +129,34 @@ describe 'Items API' do
 
       expect(item[:merchant_id]).to be_a(Integer)
       expect(item[:merchant_id]).to eq(item_params[:merchant_id])
+    end
+
+    it 'wont create when attribute missing' do
+      create(:merchant, id: 43)
+
+      item_params = {
+        name: 'Shiny Itemy Item',
+        description: 'It does a lot of things real good.',
+        merchant_id: 43
+      }
+
+      headers = { 'CONTENT_TYPE' => 'application/json' }
+
+      expect do
+        post '/api/v1/items', headers: headers, params: JSON.generate(item: item_params)
+      end.to change { Item.count }.by(0)
+
+      expect(response).not_to be_successful
+      expect(response.status).to eq(400)
+
+      parsed = JSON.parse(response.body, symbolize_names: true)
+
+      expect(parsed).to have_key(:errors)
+      expect(parsed[:errors]).to be_a Array
+
+      expect(parsed[:errors][0]).to have_key(:status)
+      expect(parsed[:errors][0]).to have_key(:message)
+      expect(parsed[:errors][0]).to have_key(:code)
     end
 
     it 'can destroy item if passed id' do
@@ -287,12 +315,36 @@ describe 'Items API' do
       expect(parsed[:errors][0]).to have_key(:code)
     end
 
+    it ', but if empty params, returns error' do
+      merch = create(:merchant)
+      db_item = create(:item, name: 'preupdate', description: 'this is the item pre update', unit_price: 4.20,
+                              merchant: merch)
+
+      new_params = {}
+
+      headers = { 'CONTENT_TYPE' => 'application/json' }
+
+      put "/api/v1/items/#{db_item.id}", headers: headers, params: JSON.generate(item: new_params)
+
+      expect(response).not_to be_successful
+      expect(response.status).to eq(400)
+
+      parsed = JSON.parse(response.body, symbolize_names: true)
+
+      expect(parsed).to have_key(:errors)
+      expect(parsed[:errors]).to be_a Array
+
+      expect(parsed[:errors][0]).to have_key(:status)
+      expect(parsed[:errors][0]).to have_key(:message)
+      expect(parsed[:errors][0]).to have_key(:code)
+    end
+
     it ', but if invalid id, returns 404' do
       merch = create(:merchant)
       _db_item = create(:item, name: 'preupdate', description: 'this is the item pre update', unit_price: 4.20,
-                              merchant: merch)
+                               merchant: merch)
 
-      put "/api/v1/items/999999999999999999"
+      put '/api/v1/items/999999999999999999'
 
       expect(response).not_to be_successful
       expect(response.status).to eq(404)
@@ -339,7 +391,7 @@ describe 'Items API' do
       _merch = create(:merchant)
       _db_item = create(:item)
 
-      get "/api/v1/items/999999999999999999/merchant"
+      get '/api/v1/items/999999999999999999/merchant'
 
       expect(response).not_to be_successful
       expect(response.status).to eq(404)
