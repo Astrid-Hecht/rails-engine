@@ -306,4 +306,51 @@ describe 'Items API' do
       expect(parsed[:errors][0]).to have_key(:code)
     end
   end
+
+  context 'can show just its associated merchant info' do
+    it 'with valid item id' do
+      merch = create(:merchant)
+      item = create(:item, merchant: merch)
+
+      get "/api/v1/items/#{item.id}/merchant"
+
+      expect(response).to be_successful
+      expect(response.status).to eq(200)
+
+      parsed = JSON.parse(response.body, symbolize_names: true)
+
+      expect(parsed).to have_key(:data)
+      expect(parsed[:data]).to be_a Hash
+
+      data = parsed[:data]
+
+      expect(data).to have_key(:id)
+      expect(data[:id]).not_to match(/\D/)
+
+      expect(data).to have_key(:type)
+      expect(data[:type]).to eq('merchant')
+
+      expect(data).to have_key(:attributes)
+      expect(data[:attributes]).to have_key(:name)
+      expect(data[:attributes][:name]).to eq(merch.name)
+    end
+
+    it ', but gives a 404 if item id isnt valid' do
+      _merch = create(:merchant)
+      _db_item = create(:item)
+
+      get "/api/v1/items/999999999999999999/merchant"
+
+      expect(response).not_to be_successful
+      expect(response.status).to eq(404)
+
+      parsed = JSON.parse(response.body, symbolize_names: true)
+
+      expect(parsed).to have_key(:errors)
+      expect(parsed[:errors]).to be_a Array
+      expect(parsed[:errors][0]).to have_key(:status)
+      expect(parsed[:errors][0]).to have_key(:message)
+      expect(parsed[:errors][0]).to have_key(:code)
+    end
+  end
 end

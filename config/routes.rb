@@ -1,8 +1,11 @@
 Rails.application.routes.draw do
   # For details on the DSL available within this file, see http://guides.rubyonrails.org/routing.html
 
+  
   namespace :api do
     namespace :v1 do
+      get '/items/:id/merchant', to: 'item_merchant#show'
+
       resources :merchants, only: %i[index show] do
         scope module: 'merchants' do
           resources :items, only: [:index]
@@ -10,6 +13,7 @@ Rails.application.routes.draw do
       end
 
       resources :items, only: %i[index show create destroy update]
+      
     end
   end
 end
