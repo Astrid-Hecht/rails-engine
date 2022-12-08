@@ -90,4 +90,44 @@ describe "Items API" do
       expect { get "/api/v1/items/#{bad_id}" }.to raise_error(ActiveRecord::RecordNotFound)
     end
   end
+
+  context 'it can create and delete one item' do 
+    it 'creates one when attributes are passed in' do 
+      item_name = 'Shiny Itemy Item'
+      item_description = 'It does a lot of things real good.'
+      item_price = 123.45
+      item_merchant_id = 43
+
+      item_params = ({
+        name: item_name,
+        description: item_description,
+        unit_price: item_price,
+        merchant_id: item_merchant_id
+      })
+
+      headers = {"CONTENT_TYPE" => "application/json"}
+
+      post "/api/v1/items", headers: headers, params: JSON.generate(item: item_params)
+      item = Item.last
+
+      expect(response).to be_successful
+      expect(response.status).to eq(201)
+
+      expect(item).to have_key(:name)
+      expect(item[:name]).to be_a(String)
+      expect(item[:name]).to eq(item_params[:name])
+
+      expect(item).to have_key(:description)
+      expect(item[:description]).to be_a(String)
+      expect(item[:description]).to eq(item_params[:description])
+
+      expect(item).to have_key(:unit_price)
+      expect(item[:unit_price]).to be_a(Float)
+      expect(item[:unit_price]).to eq(item_params[:unit_price])
+
+      expect(item).to have_key(:merchant_id)
+      expect(item[:merchant_id]).to be_a(Integer)
+      expect(item[:merchant_id]).to eq(item_params[:merchant_id])
+    end
+  end
 end
