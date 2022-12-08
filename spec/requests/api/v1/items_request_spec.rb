@@ -123,6 +123,7 @@ describe "Items API" do
     end
 
     it 'can destroy item if passed id' do
+      create(:merchant)
       first = create(:item, name: "first")
       second = create(:item, name: "second")
 
@@ -131,8 +132,119 @@ describe "Items API" do
 
       expect { delete "/api/v1/items/#{second.id}" }.to change { Item.count }.by(-1)
 
+      expect(response.status).to eq(204)
+
       expect(Item.last).not_to eq(second)
       expect(Item.last).to eq(first)
+    end
+  end
+
+  context 'it can update one item' do
+    it 'with a full hash of data' do
+      merch = create(:merchant)
+      new_merch = create(:merchant, id: 43)
+      db_item = create(:item, name: 'preupdate', description: "this is the item pre update", unit_price: 4.20, merchant: merch)
+
+      new_params = ({
+        name: 'Shiny Itemy Item',
+        description: 'It does a lot of things real good.',
+        unit_price: 69.69,
+        merchant_id: 43
+      })
+
+      headers = {"CONTENT_TYPE" => "application/json"}
+
+      put "/api/v1/items/#{db_item.id}", headers: headers, params: JSON.generate(item: new_params)
+
+      expect(response).to be_successful
+      expect(response.status).to eq(200)
+
+      parsed = JSON.parse(response.body, symbolize_names: true)
+
+      expect(parsed).to have_key(:data)
+      expect(parsed[:data]).to be_a Hash
+
+      data = parsed[:data]
+
+      expect(data).to have_key(:id)
+      expect(data[:id]).to eq(db_item.id)
+
+      expect(data).to have_key(:type)
+      expect(data[:type]).to eq('item')
+
+      expect(data).to have_key(:attributes)
+      expect(data).to be_a Hash
+
+      item = data[:attributes]
+
+      expect(item).to have_key(:name)
+      expect(item[:name]).to be_a(String)
+      expect(item[:name]).to eq('Shiny Itemy Item')
+
+      expect(item).to have_key(:description)
+      expect(item[:description]).to be_a(String)
+      expect(item[:description]).to eq('It does a lot of things real good.')
+
+      expect(item).to have_key(:unit_price)
+      expect(item[:unit_price]).to be_a(Float)
+      expect(item[:unit_price]).to eq(69.69)
+
+      expect(item).to have_key(:merchant_id)
+      expect(item[:merchant_id]).to be_a(Integer)
+      expect(item[:merchant_id]).to eq(43)
+    end
+
+    it 'with partial data' do
+      merch = create(:merchant)
+      db_item = create(:item, name: 'preupdate', description: "this is the item pre update", unit_price: 4.20, merchant: merch)
+
+      new_params = ({
+        description: 'It does a lot of things real good.'
+      })
+
+      headers = {"CONTENT_TYPE" => "application/json"}
+
+      put "/api/v1/items/#{db_item.id}", headers: headers, params: JSON.generate(item: new_params)
+
+      expect(response).to be_successful
+      expect(response.status).to eq(200)
+
+      parsed = JSON.parse(response.body, symbolize_names: true)
+
+      expect(parsed).to have_key(:data)
+      expect(parsed[:data]).to be_a Hash
+
+      data = parsed[:data]
+
+      expect(data).to have_key(:id)
+      expect(data[:id]).to eq(db_item.id)
+
+      expect(data).to have_key(:type)
+      expect(data[:type]).to eq('item')
+
+      expect(data).to have_key(:attributes)
+      expect(data).to be_a Hash
+
+      item = data[:attributes]
+
+      expect(item).to have_key(:name)
+      expect(item[:name]).to be_a(String)
+      expect(item[:name]).to eq(db_item.name)
+
+      expect(item).to have_key(:description)
+      expect(item[:description]).to be_a(String)
+      expect(item[:description]).to eq('It does a lot of things real good.')
+    end
+
+    it ', but if no data, returns error' do
+      merch = create(:merchant)
+      db_item = create(:item, name: 'preupdate', description: "this is the item pre update", unit_price: 4.20, merchant: merch)
+
+      new_params = ({})
+      put "/api/v1/items/#{db_item.id}", headers: headers, params: JSON.generate(item: new_params)
+
+      expect(response).not_to be_successful
+      expect(response.status).to eq(400)
     end
   end
 end
