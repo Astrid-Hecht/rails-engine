@@ -20,6 +20,14 @@ ___
  * After set up, run `bundle exec rspec spec`, `bundle exec rspec spec/models`, or `bundle exec rspec spec/requests` to check test coverage
  * Additional coverage details can be found by running `open coverage/index.html`
  
+ ### Future refactors
+ * Add support for other tables, i.e. Invoices, Customers, etc.
+ * Dry up tests - The test files are fairly bloated and have a lot of repeated code, could definitely be optimized
+ * Refactor models and serializers
+ * Complete the opposite set of search endpoints (one merchant, all items)
+ * Impliment pagination
+ * Add authorization
+ 
  ### Other info
  The project kickoff page can be found here: https://backend.turing.edu/module3/projects/rails_engine_lite/
  The above page also has two links to download additional test suites for postman that this project was written to pass. If you'd like to test it   further, feel free to import them into postman and run them after starting the rails server.
