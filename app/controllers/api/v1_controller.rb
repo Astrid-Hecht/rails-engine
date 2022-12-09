@@ -21,7 +21,7 @@ module Api
     end
 
     def render_search_item_not_found
-      render json: NoResultsSerializer.new(Error.new('No matching items found', 'OK', 200)).serialized_json, status: 200
+      render json: NoResultsSerializer.new(Error.new('No matching items found', 'OK', 200), :find_one).serialized_json, status: 200
       false
     end
 
@@ -31,7 +31,7 @@ module Api
     end
 
     def render_search_merchants_not_found
-      render json: NoResultsSerializer.new(Error.new('No matching merchants found', 'OK', 200)).serialized_json, status: 200
+      render json: NoResultsSerializer.new(Error.new('No matching merchants found', 'OK', 200), :find_all).serialized_json, status: 200
       false
     end
 

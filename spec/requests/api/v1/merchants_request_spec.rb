@@ -53,8 +53,7 @@ describe 'Merchants API' do
     end
 
     it 'sends 404 if id is not valid' do
-      bad_id = 8_923_987_297
-      get "/api/v1/merchants/#{bad_id}"
+      get '/api/v1/merchants/8923987297'
       expect(response.status).to eq(404)
 
       parsed = JSON.parse(response.body, symbolize_names: true)
@@ -114,8 +113,7 @@ describe 'Merchants API' do
     end
 
     it 'sends 404 if id is not valid' do
-      bad_id = 8923987297
-      get "/api/v1/merchants/#{bad_id}/items"
+      get '/api/v1/merchants/8923987297/items'
 
       expect(response.status).to eq(404)
 

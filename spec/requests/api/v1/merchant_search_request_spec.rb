@@ -5,7 +5,7 @@ describe 'Search API' do
     it 'can search for merchants with perfect matching name' do
       target_merchant = create(:merchant, name: 'Bill')
       unwanted_merchant = create(:merchant, name: 'Zill')
-      
+
       get '/api/v1/merchants/find_all?name=bill'
 
       expect(response).to be_successful
@@ -78,17 +78,24 @@ describe 'Search API' do
     it 'will return an array, even if no results are found' do
       _target_merchant = create(:merchant, name: 'Bill')
       _unwanted_merchant = create(:merchant, name: 'Zill')
-      
+
       get '/api/v1/merchants/find_all?name=abcdefghijklmnop'
 
       expect(response).to be_successful
       expect(response.status).to eq(200)
 
-      merchants = JSON.parse(response.body, symbolize_names: true)
+      parsed = JSON.parse(response.body, symbolize_names: true)
 
-      expect(merchants.keys).to eq([:data])
-      expect(merchants[:data]).to be_an Array
-      expect(merchants[:data].count).to eq(0)
+      expect(parsed).to have_key(:data)
+      expect(parsed[:data]).to be_a Array
+      expect(parsed[:data]).to eq([])
+
+      expect(parsed).to have_key(:error)
+      expect(parsed[:error]).to be_a Hash
+
+      expect(parsed[:error]).to have_key(:status)
+      expect(parsed[:error]).to have_key(:error_message)
+      expect(parsed[:error]).to have_key(:code)
     end
 
     it 'returns error w empty search param' do

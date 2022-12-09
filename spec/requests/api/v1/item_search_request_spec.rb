@@ -303,9 +303,12 @@ describe 'Search API' do
       expect(parsed).to have_key(:data)
       expect(parsed[:data]).to be_a Hash
 
-      expect(parsed[:data]).to have_key(:status)
-      expect(parsed[:data]).to have_key(:error_message)
-      expect(parsed[:data]).to have_key(:code)
+      expect(parsed).to have_key(:error)
+      expect(parsed[:error]).to be_a Hash
+
+      expect(parsed[:error]).to have_key(:status)
+      expect(parsed[:error]).to have_key(:error_message)
+      expect(parsed[:error]).to have_key(:code)
 
       get '/api/v1/items/find?max_price=00.01'
 
@@ -317,9 +320,12 @@ describe 'Search API' do
       expect(parsed).to have_key(:data)
       expect(parsed[:data]).to be_a Hash
 
-      expect(parsed[:data]).to have_key(:status)
-      expect(parsed[:data]).to have_key(:error_message)
-      expect(parsed[:data]).to have_key(:code)
+      expect(parsed).to have_key(:error)
+      expect(parsed[:error]).to be_a Hash
+
+      expect(parsed[:error]).to have_key(:status)
+      expect(parsed[:error]).to have_key(:error_message)
+      expect(parsed[:error]).to have_key(:code)
     end
 
     it 'returns error w search for a item with max lower than min price' do

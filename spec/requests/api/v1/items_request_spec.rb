@@ -175,6 +175,30 @@ describe 'Items API' do
       expect(Item.last).to eq(first)
     end
 
+    it 'will destroy invoice item to delete is only item on it' do
+      merch = create(:merchant)
+      cust = create(:customer)
+
+      item1 = create(:item)
+      item2 = create(:item)
+
+      invoice1 = create(:invoice, customer: cust, merchant_id: merch.id)
+      invoice2 = create(:invoice, customer: cust, merchant_id: merch.id)
+
+      _inv_item1 = create(:invoice_item, item: item1, invoice: invoice1)
+
+      _inv_item2 = create(:invoice_item, item: item1, invoice: invoice2)
+      inv_item3 = create(:invoice_item, item: item2, invoice: invoice2)
+
+      expect { delete "/api/v1/items/#{item1.id}" }.to change { Invoice.count }.by(-1)
+
+      expect(Invoice.all).to eq([invoice2])
+      expect(InvoiceItem.all).to eq([inv_item3])
+      
+      expect(response.status).to eq(204)
+
+    end
+
     it 'gives a 404 if item to destroy if id is invalid & doesnt delete anything' do
       create(:merchant)
       first = create(:item)

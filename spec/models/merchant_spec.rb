@@ -36,5 +36,19 @@ RSpec.describe Merchant, type: :model do
         expect(Merchant.valid_search?(params)).to be false
       end
     end
+
+    describe '#search_all' do
+      let!(:merchant2) { create(:merchant, name: 'Phill') }
+      let!(:merchant1) { create(:merchant, name: 'Bill') }
+      let!(:merchant3) { create(:merchant, name: 'Joll') }
+
+      it 'returns one object with a perfectly matching name' do
+        expect(Merchant.search_all({ 'name': 'Phill' })).to eq([merchant2])
+      end
+
+      it 'returns matching merchants alphabetically with a name fragment' do
+        expect(Merchant.search_all({ 'name': 'ill' })).to eq([merchant1, merchant2])
+      end
+    end
   end
 end

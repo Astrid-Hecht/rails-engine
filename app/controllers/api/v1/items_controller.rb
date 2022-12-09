@@ -1,7 +1,6 @@
 module Api
   module V1
     class ItemsController < V1Controller
-
       def index
         render json: ItemSerializer.new(Item.all)
       end
