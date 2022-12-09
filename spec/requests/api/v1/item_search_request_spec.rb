@@ -301,6 +301,42 @@ describe 'Search API' do
       expect(parsed[:error][0]).to have_key(:code)
     end
 
+    it 'returns error w search for a item with neg max and/or min price' do
+      merchant = create(:merchant)
+      _target_item = create(:item, name: 'Bitumen', unit_price: 25.35, merchant: merchant)
+      _unwanted_item = create(:item, name: 'Max Lumen Lightbulbs', unit_price: 103.34, merchant: merchant)
+      _unwanted_item2 = create(:item, name: 'who cares', unit_price: 4.99, merchant: merchant)
+      _unwanted_item3 = create(:item, name: 'zumba dvd', unit_price: 24.99, merchant: merchant)
+
+      get '/api/vi/items/find?min_price=-20.00'
+
+      expect(response).not_to be_successful
+      expect(response.status).to eq(400)
+
+      parsed = JSON.parse(response.body, symbolize_names: true)
+
+      expect(parsed).to have_key(:error)
+      expect(parsed[:error]).to be_a Array
+
+      expect(parsed[:error][0]).to have_key(:status)
+      expect(parsed[:error][0]).to have_key(:message)
+      expect(parsed[:error][0]).to have_key(:code)
+
+      get '/api/vi/items/find?max_price=-200.00'
+
+      expect(response).not_to be_successful
+      expect(response.status).to eq(400)
+
+      parsed = JSON.parse(response.body, symbolize_names: true)
+
+      expect(parsed).to have_key(:error)
+      expect(parsed[:error]).to be_a Array
+
+      expect(parsed[:error][0]).to have_key(:status)
+      expect(parsed[:error][0]).to have_key(:message)
+      expect(parsed[:error][0]).to have_key(:code)
+    end
+
     it 'returns error w empty search param' do
       _merchant = create(:merchant)
       _target_item = create(:item, name: 'Bitumen', unit_price: 25.35, merchant: merchant)
