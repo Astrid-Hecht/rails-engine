@@ -5,7 +5,6 @@ module Api
         return render_bad_request unless Item.valid_search?(params)
         item = Item.search_one(search_params)
         return render_search_item_not_found unless item != nil
-        # binding.pry
         render json: ItemSerializer.new(Item.search_one(search_params)), status: 200
       end
 
