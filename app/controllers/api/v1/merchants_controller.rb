@@ -7,11 +7,7 @@ module Api
       end
 
       def show
-        if merch_id_valid?
-          render json: MerchantSerializer.new(Merchant.find(params[:id]))
-        else
-          render json: ErrorSerializer.new(Error.new('Invalid merchant id', 'NOT FOUND', 404)).serialized_json, status: :not_found
-        end
+        render json: MerchantSerializer.new(Merchant.find(params[:id])) if merch_id_valid?
       end
     end
   end
