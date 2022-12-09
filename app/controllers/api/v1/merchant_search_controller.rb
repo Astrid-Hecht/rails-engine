@@ -1,6 +1,6 @@
 module Api
   module V1
-    class MerchantSearchController < ApplicationController
+    class MerchantSearchController < V1Controller
       def index
         return render_bad_request unless Merchant.valid_search?(params)
         merch = Merchant.search_all(search_params)

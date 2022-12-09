@@ -1,6 +1,5 @@
 class Merchant < ApplicationRecord
   validates :name, presence: true
-  # validates :enabled, inclusion: [true, false]
 
   has_many :items, dependent: :destroy
   has_many :invoice_items, through: :items
@@ -10,11 +9,11 @@ class Merchant < ApplicationRecord
 
   def self.valid_search?(params)
     return true if params[:name].present? && params[:name].is_a?(String) && params[:name] != ''
-    
+
     false
   end
 
   def self.search_all(params)
-    Merchant.where('LOWER(name) LIKE ?', "%#{params[:name].downcase}%").order(:name)
+    Merchant.where('name ILIKE ?', "%#{params[:name]}%").order(:name)
   end
 end

@@ -194,7 +194,7 @@ describe 'Search API' do
       unwanted_item = create(:item, name: 'Max Lumen Lightbulbs', unit_price: 103.34, merchant: merchant)
       _unwanted_item2 = create(:item, name: 'who cares', unit_price: 4.99, merchant: merchant)
       _unwanted_item3 = create(:item, name: 'zumba dvd', unit_price: 24.99, merchant: merchant)
-
+      
       get '/api/v1/items/find?max_price=30.00&min_price=20.00'
 
       expect(response).to be_successful
