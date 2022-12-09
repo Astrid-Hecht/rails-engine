@@ -1,9 +1,11 @@
 # Rails Engine Light
 
 ## Project Summary
-This was a 4 day solo project assigned during my time at Turing. It was meant to teach the importance and methods of API creation, exposure, and non-RESTful endpoints, as well as reinforcment on MVC design principles. Rails Engine Lite also heavily focused on giving us the tools to expect, handle, and test any possible edge cases; my implimentation of the project pushed that goal as far as possible. 
+This was a 4 day solo project assigned during my time at the Turing School of Software and Design. It was meant to teach the importance and methods of API creation, exposure, and non-RESTful endpoints, as well as reinforcment on MVC design principles. Rails Engine Lite also heavily focused on giving us the tools to expect, handle, and test any possible edge cases; my personal implimentation of the project tried to pushed that goal as far as possible. 
 
-Besides the data set & schema, everything was built from scratch. 
+Besides the data set & schema, everything was built from scratch.
+
+___
 
 ### Installation and set-up
  * Fork and clone this repository
@@ -12,7 +14,7 @@ Besides the data set & schema, everything was built from scratch.
  * Run `rails s`
  And you should be good to go!
  
- Routes can be found with the command `rails routes` or by viewing the route file. They generally follow the format of `/api/v1/<object>/<id or action>` where <object> is either `merchants` or `items`
+ Routes can be found with the command `rails routes` or by viewing the route file. They generally follow the format of `/api/v1/<object>/<id or action>` where `<object>` is either `merchants` or `items`
  
  ### Testing
  * After set up, run `bundle exec rspec spec`, `bundle exec rspec spec/models`, or `bundle exec rspec spec/requests` to check test coverage
