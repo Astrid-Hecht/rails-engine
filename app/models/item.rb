@@ -10,6 +10,9 @@ class Item < ApplicationRecord
   def self.valid_search?(params)
     return false if params.keys.include?('name') && (params.keys.include?('min_price') || params.keys.include?('max_price'))
     return true if params[:name].present? && params[:name].is_a?(String) && params[:name] != ''
+    if params[:min_price].present? && params[:max_price].present?
+      return false if params[:min_price].to_f > params[:max_price].to_f
+    end
     return false if params[:max_price].to_f.negative? || params[:min_price].to_f.negative?
     return true if (params[:min_price].present? && params[:min_price] != '') || (params[:max_price].present? && params[:max_price] != '')
 
@@ -18,7 +21,7 @@ class Item < ApplicationRecord
 
   def self.search_one(params)
     if params[:name].present? && params[:name].is_a?(String) && params[:name] != ''
-      return Item.where('LOWER(name) LIKE ?', "%#{params[:name].downcase}").order(:name).first
+      return Item.where('LOWER(name) LIKE ?', "%#{params[:name].downcase}%").order(:name).first
     elsif (params[:min_price].present? && params[:min_price] != '') || (params[:max_price].present? && params[:max_price] != '')
       return price_logic(params)
     end

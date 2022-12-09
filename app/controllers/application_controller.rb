@@ -18,8 +18,18 @@ class ApplicationController < ActionController::API
     false
   end
 
+  def render_search_item_not_found
+    render json: NoResultsSerializer.new(Error.new('No matching items found', 'OK', 200)).serialized_json, status: 200
+    false
+  end
+
   def render_merchant_not_found
-    render json: ErrorSerializer.new(Error.new('Invalid merchant id', 'NOT FOUND', 404)).serialized_json, status: :not_found
+    render json: ErrorSerializer.new(Error.new('Invalid item id', 'NOT FOUND', 404)).serialized_json, status: :not_found
+    false
+  end
+
+  def render_search_merchants_not_found
+    render json: NoResultsSerializer.new(Error.new('No matching merchants found', 'OK', 200)).serialized_json, status: 200
     false
   end
 
