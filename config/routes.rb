@@ -5,7 +5,9 @@ Rails.application.routes.draw do
   namespace :api do
     namespace :v1 do
       get '/items/:id/merchant', to: 'item_merchant#show'
-
+      get '/merchants/find_all', to: 'merchant_search#show'
+      get '/items/find', to: 'item_search#show'
+      
       resources :merchants, only: %i[index show] do
         scope module: 'merchants' do
           resources :items, only: [:index]
@@ -13,7 +15,6 @@ Rails.application.routes.draw do
       end
 
       resources :items, only: %i[index show create destroy update]
-      
     end
   end
 end

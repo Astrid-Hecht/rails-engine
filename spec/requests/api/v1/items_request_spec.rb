@@ -25,19 +25,19 @@ describe 'Items API' do
 
       expect(item[:attributes]).to have_key(:name)
       expect(item[:attributes][:name]).to be_a(String)
-      expect(item[:attributes][:name]).to eq(Item.find_by(id: index + 1).name)
+      expect(item[:attributes][:name]).to eq(Item.last(10)[index].name)
 
       expect(item[:attributes]).to have_key(:description)
       expect(item[:attributes][:description]).to be_a(String)
-      expect(item[:attributes][:description]).to eq(Item.find_by(id: index + 1).description)
+      expect(item[:attributes][:description]).to eq(Item.last(10)[index].description)
 
       expect(item[:attributes]).to have_key(:unit_price)
       expect(item[:attributes][:unit_price]).to be_a(Float)
-      expect(item[:attributes][:unit_price]).to eq(Item.find_by(id: index + 1).unit_price)
+      expect(item[:attributes][:unit_price]).to eq(Item.last(10)[index].unit_price)
 
       expect(item[:attributes]).to have_key(:merchant_id)
       expect(item[:attributes][:merchant_id]).to be_a(Integer)
-      expect(item[:attributes][:merchant_id]).to eq(Item.find_by(id: index + 1).merchant_id)
+      expect(item[:attributes][:merchant_id]).to eq(Item.last(10)[index].merchant_id)
     end
   end
 
