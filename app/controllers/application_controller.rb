@@ -1,18 +1,16 @@
 class ApplicationController < ActionController::API
   def merch_id_valid?
-    id = if params[:merchant_id].present?
-           params[:merchant_id]
-         else
-           params[:id]
-         end
-    render_merchant_not_found unless merch_id_list.include?(id.to_i)
-    merch_id_list.include?(id.to_i)
+    id = params[:id]
+    id = params[:merchant_id] if params[:merchant_id].present?
+    return render_merchant_not_found unless merch_id_list.include?(id.to_i)
+
+    true
   end
 
   def item_id_valid?
-    item_ids = Item.all.map(&:id)
-    render_item_not_found unless item_ids.include?(params[:id].to_i)
-    item_ids.include?(params[:id].to_i)
+    return render_item_not_found unless Item.all.map(&:id).include?(params[:id].to_i)
+
+    true
   end
 
   def render_item_not_found

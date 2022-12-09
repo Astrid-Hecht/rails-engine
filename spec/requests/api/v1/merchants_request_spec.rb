@@ -59,12 +59,12 @@ describe 'Merchants API' do
 
       parsed = JSON.parse(response.body, symbolize_names: true)
 
-      expect(parsed).to have_key(:errors)
-      expect(parsed[:errors]).to be_a Array
+      expect(parsed).to have_key(:error)
+      expect(parsed[:error]).to be_a Array
 
-      expect(parsed[:errors][0]).to have_key(:status)
-      expect(parsed[:errors][0]).to have_key(:message)
-      expect(parsed[:errors][0]).to have_key(:code)
+      expect(parsed[:error][0]).to have_key(:status)
+      expect(parsed[:error][0]).to have_key(:message)
+      expect(parsed[:error][0]).to have_key(:code)
     end
   end
 
@@ -121,12 +121,12 @@ describe 'Merchants API' do
 
       parsed = JSON.parse(response.body, symbolize_names: true)
 
-      expect(parsed).to have_key(:errors)
-      expect(parsed[:errors]).to be_a Array
+      expect(parsed).to have_key(:error)
+      expect(parsed[:error]).to be_a Array
 
-      expect(parsed[:errors][0]).to have_key(:status)
-      expect(parsed[:errors][0]).to have_key(:message)
-      expect(parsed[:errors][0]).to have_key(:code)
+      expect(parsed[:error][0]).to have_key(:status)
+      expect(parsed[:error][0]).to have_key(:message)
+      expect(parsed[:error][0]).to have_key(:code)
     end
   end
 end

@@ -64,7 +64,7 @@ describe 'Items API' do
       expect(data[:type]).to eq('item')
 
       expect(data).to have_key(:attributes)
-      expect(data).to be_a Hash
+      expect(data[:attributes]).to be_a Hash
 
       item = data[:attributes]
 
@@ -91,12 +91,12 @@ describe 'Items API' do
 
       parsed = JSON.parse(response.body, symbolize_names: true)
 
-      expect(parsed).to have_key(:errors)
-      expect(parsed[:errors]).to be_a Array
+      expect(parsed).to have_key(:error)
+      expect(parsed[:error]).to be_a Array
 
-      expect(parsed[:errors][0]).to have_key(:status)
-      expect(parsed[:errors][0]).to have_key(:message)
-      expect(parsed[:errors][0]).to have_key(:code)
+      expect(parsed[:error][0]).to have_key(:status)
+      expect(parsed[:error][0]).to have_key(:message)
+      expect(parsed[:error][0]).to have_key(:code)
     end
   end
 
@@ -151,12 +151,12 @@ describe 'Items API' do
 
       parsed = JSON.parse(response.body, symbolize_names: true)
 
-      expect(parsed).to have_key(:errors)
-      expect(parsed[:errors]).to be_a Array
+      expect(parsed).to have_key(:error)
+      expect(parsed[:error]).to be_a Array
 
-      expect(parsed[:errors][0]).to have_key(:status)
-      expect(parsed[:errors][0]).to have_key(:message)
-      expect(parsed[:errors][0]).to have_key(:code)
+      expect(parsed[:error][0]).to have_key(:status)
+      expect(parsed[:error][0]).to have_key(:message)
+      expect(parsed[:error][0]).to have_key(:code)
     end
 
     it 'can destroy item if passed id' do
@@ -187,12 +187,12 @@ describe 'Items API' do
 
       parsed = JSON.parse(response.body, symbolize_names: true)
 
-      expect(parsed).to have_key(:errors)
-      expect(parsed[:errors]).to be_a Array
+      expect(parsed).to have_key(:error)
+      expect(parsed[:error]).to be_a Array
 
-      expect(parsed[:errors][0]).to have_key(:status)
-      expect(parsed[:errors][0]).to have_key(:message)
-      expect(parsed[:errors][0]).to have_key(:code)
+      expect(parsed[:error][0]).to have_key(:status)
+      expect(parsed[:error][0]).to have_key(:message)
+      expect(parsed[:error][0]).to have_key(:code)
     end
   end
 
@@ -307,12 +307,12 @@ describe 'Items API' do
 
       parsed = JSON.parse(response.body, symbolize_names: true)
 
-      expect(parsed).to have_key(:errors)
-      expect(parsed[:errors]).to be_a Array
+      expect(parsed).to have_key(:error)
+      expect(parsed[:error]).to be_a Array
 
-      expect(parsed[:errors][0]).to have_key(:status)
-      expect(parsed[:errors][0]).to have_key(:message)
-      expect(parsed[:errors][0]).to have_key(:code)
+      expect(parsed[:error][0]).to have_key(:status)
+      expect(parsed[:error][0]).to have_key(:message)
+      expect(parsed[:error][0]).to have_key(:code)
     end
 
     it ', but if empty params, returns error' do
@@ -331,12 +331,12 @@ describe 'Items API' do
 
       parsed = JSON.parse(response.body, symbolize_names: true)
 
-      expect(parsed).to have_key(:errors)
-      expect(parsed[:errors]).to be_a Array
+      expect(parsed).to have_key(:error)
+      expect(parsed[:error]).to be_a Array
 
-      expect(parsed[:errors][0]).to have_key(:status)
-      expect(parsed[:errors][0]).to have_key(:message)
-      expect(parsed[:errors][0]).to have_key(:code)
+      expect(parsed[:error][0]).to have_key(:status)
+      expect(parsed[:error][0]).to have_key(:message)
+      expect(parsed[:error][0]).to have_key(:code)
     end
 
     it ', but if invalid id, returns 404' do
@@ -351,11 +351,11 @@ describe 'Items API' do
 
       parsed = JSON.parse(response.body, symbolize_names: true)
 
-      expect(parsed).to have_key(:errors)
-      expect(parsed[:errors]).to be_a Array
-      expect(parsed[:errors][0]).to have_key(:status)
-      expect(parsed[:errors][0]).to have_key(:message)
-      expect(parsed[:errors][0]).to have_key(:code)
+      expect(parsed).to have_key(:error)
+      expect(parsed[:error]).to be_a Array
+      expect(parsed[:error][0]).to have_key(:status)
+      expect(parsed[:error][0]).to have_key(:message)
+      expect(parsed[:error][0]).to have_key(:code)
     end
   end
 
@@ -398,11 +398,11 @@ describe 'Items API' do
 
       parsed = JSON.parse(response.body, symbolize_names: true)
 
-      expect(parsed).to have_key(:errors)
-      expect(parsed[:errors]).to be_a Array
-      expect(parsed[:errors][0]).to have_key(:status)
-      expect(parsed[:errors][0]).to have_key(:message)
-      expect(parsed[:errors][0]).to have_key(:code)
+      expect(parsed).to have_key(:error)
+      expect(parsed[:error]).to be_a Array
+      expect(parsed[:error][0]).to have_key(:status)
+      expect(parsed[:error][0]).to have_key(:message)
+      expect(parsed[:error][0]).to have_key(:code)
     end
   end
 end

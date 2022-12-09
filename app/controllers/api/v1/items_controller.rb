@@ -12,11 +12,9 @@ module Api
 
       def create
         item = Item.new(item_params)
-        if item.save
-          render json: ItemSerializer.new(item), status: :created
-        else
-          render_bad_request
-        end
+        return render_bad_request unless item.save
+
+        render json: ItemSerializer.new(item), status: :created
       end
 
       def update
