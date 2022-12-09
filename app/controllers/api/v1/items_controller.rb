@@ -1,7 +1,6 @@
 module Api
   module V1
-    class ItemsController < ApplicationController
-
+    class ItemsController < V1Controller
       def index
         render json: ItemSerializer.new(Item.all)
       end
@@ -26,7 +25,11 @@ module Api
       end
 
       def destroy
-        render json: ItemSerializer.new(Item.destroy(params[:id])), status: :no_content if item_id_valid?
+        if item_id_valid?
+          item = Item.find(params[:id])
+          item.invoice_check
+          render json: ItemSerializer.new(item.destroy), status: :no_content
+        end
       end
 
       private

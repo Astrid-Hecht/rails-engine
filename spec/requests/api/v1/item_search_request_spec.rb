@@ -194,7 +194,7 @@ describe 'Search API' do
       unwanted_item = create(:item, name: 'Max Lumen Lightbulbs', unit_price: 103.34, merchant: merchant)
       _unwanted_item2 = create(:item, name: 'who cares', unit_price: 4.99, merchant: merchant)
       _unwanted_item3 = create(:item, name: 'zumba dvd', unit_price: 24.99, merchant: merchant)
-
+      
       get '/api/v1/items/find?max_price=30.00&min_price=20.00'
 
       expect(response).to be_successful
@@ -303,9 +303,12 @@ describe 'Search API' do
       expect(parsed).to have_key(:data)
       expect(parsed[:data]).to be_a Hash
 
-      expect(parsed[:data]).to have_key(:status)
-      expect(parsed[:data]).to have_key(:error_message)
-      expect(parsed[:data]).to have_key(:code)
+      expect(parsed).to have_key(:error)
+      expect(parsed[:error]).to be_a Hash
+
+      expect(parsed[:error]).to have_key(:status)
+      expect(parsed[:error]).to have_key(:error_message)
+      expect(parsed[:error]).to have_key(:code)
 
       get '/api/v1/items/find?max_price=00.01'
 
@@ -317,9 +320,12 @@ describe 'Search API' do
       expect(parsed).to have_key(:data)
       expect(parsed[:data]).to be_a Hash
 
-      expect(parsed[:data]).to have_key(:status)
-      expect(parsed[:data]).to have_key(:error_message)
-      expect(parsed[:data]).to have_key(:code)
+      expect(parsed).to have_key(:error)
+      expect(parsed[:error]).to be_a Hash
+
+      expect(parsed[:error]).to have_key(:status)
+      expect(parsed[:error]).to have_key(:error_message)
+      expect(parsed[:error]).to have_key(:code)
     end
 
     it 'returns error w search for a item with max lower than min price' do
